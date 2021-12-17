@@ -1,165 +1,313 @@
-/*  
-Welcome to the Rock, Paper, Scissor, Lizard and Spock game. In this game the user (player) 
-will be playing against the computer. The Game rules are :
-  Rock crushes Lizard and crushes Scissors
-• Paper disproves Spock and covers Rock
-• Scissors cuts Paper and decapitates Lizard
-• Lizard poisons Spock and eats Paper
-• Spock smashes Scissors and vaporises Rock
-the user will get to play as many time as he wants until he decides to quit the game 
-*/
-
-#include <iostream>
+#include <iostream> 
 #include <stdlib.h>
+#include <string.h>
 
-using namespace std;
 
-void gameOptions();
+char showMenu();
+
+
+void menuOptions(char playerInput);
+void instruction(); 
 void startGame();
-void gameInformation();
-void gameScore();
+void displayOption();
+
+void checkResult(int playerEn, int computerEn);
+void endGame();
 void quitGame();
+void gameInformation();
 
-char playerEnter;
-char computerEnter;
-char optionChar;
-bool goodInput = false;
-bool gameactive = true;
-bool gameOutcome;
+int gameinformationEn;
+int playerEnter();
+int displayplayerEnter(int playerEn);
+int computerEnter();
+int displaycomputerEnter(int computerEn);
 
+bool gameActive = false;
+bool Input = false;
+bool gameResults;
 
-int R[5][5] = 
-{ 
- //R.  P. S  L  O computer
-  {2, 1, 0, 0, 1}, // rock player
-  {0, 2, 1, 1, 0}, // paper
-  {1, 0, 2, 0, 1}, // scissors
-  {1, 0, 1, 2, 0}, // lizard 
-  {0, 1, 0, 1, 2}  // spock
-};
+char continueGame;
+char cont;
+bool results[5][5] =    //rock, paper, scis, lzrd, spock - player
+{						{true, true, false, false, true}, //rock - comp
+						{false, true, true, true, false}, //paper
+						{true, false, true, false, true}, //scissors
+						{true, false, true, true, false}, //lizard
+						{false, true, false, true, true}, //spock
+}; 
 
-int main()
+char showMenu()
 {
-  srand(time(NULL));
-  
-  gameOptions();
+	
+	
+	system("clear");
 
-  while(gameactive)
+	std:: cout << "------------------\n"; 
+	std:: cout << "*******************\n";
+	std:: cout << "Welcome to Rock, Paper, Scissor, lizard, Spock\n";
+	std:: cout << " \n ";
+	std:: cout << "Enter [S] to start game\n";
+	std:: cout << " \n ";
+	std:: cout << "Enter [H] to game information\n";
+	std:: cout << " \n "; 
+	std:: cout << "Enter [Q] to quit game\n";
+	std:: cout << " \n ";
+	std:: cout << " Good Luck!\n";
+    std:: cout << "------------------\n"; 
+	std:: cout << "*******************\n";
 
-return 0;
+    char playerInput;
+	std:: cin >> playerInput;
+	return playerInput;
+
 }
 
-
-void gameOptions()
+void menuOptions(char playerInput)
 {
- 
- system("clear");
- cout << "****************************************" << endl;
- cout << "  ";
- cout << "Welcome to Rock Paper Scissor Lizard Spock" << endl;
- cout << "  ";
- cout << "****************************************" << endl;
- cout << "Enter the keys below to play your options:" << endl;
- cout << "  ";
- cout << " Enter [S] to start" << endl;
- cout << "  ";
- cout << " Enter [H] for game information" << endl;
- cout << "  ";
- cout << " Enter [B] to view the score board" << endl;
- cout << "  ";
- cout << " Enter [Q] to quit the game " << endl;
- cout << "  ";
- cout << "May the best man win!" << endl;
- 
- cin >> playerEnter;
- switch (playerEnter) 
-  {
-	  case 'S':
-	  case 's':
-		goodInput = true;
-		startGame();
-		break;
-    case 'H':
-	  case 'h':
-		goodInput = true;
-		gameInformation();
-		break;
-    case 'Q':
-    case 'q':
-    goodInput = true;
-    quitGame();
-    break;
-
-    default: return;
-  }
+  switch (playerInput)
+   {
+         case 'S':
+         case 's':
+           Input = true;
+	       startGame();
+	  break;
+         case 'H':
+         case 'h':
+           Input = true;
+	       gameInformation();
+	  break;
+         case 'Q':
+         case 'q':
+           Input = true;
+	       QuitOptions();
+	  break;
+      default:
+      Input = false;
+	  std:: cout << "Wrong Key Entered Try Agian\n";
+      break;
+    }
 }
 
 
 void startGame()
 {
- 
- 
- 
-  
-  
-   cout << "To return to the menu Enter [B]\n";
-   cin >> playerEnter;
-   switch(playerEnter)
+  system("clear");
+  gameActive = true;
+  displayOption();
+}
+
+void displayOption()
+{
+    std:: cout << "________________________________________________________________________________\n";
+	std:: cout << " \n ";
+	std:: cout << "|| [R] = Rock || [P] = Paper || [S] = Scissors || [L] = Lizard || [O] = Spock\n";
+	std:: cout << " \n ";
+	std:: cout << "_______________________________________________________________________________\n";
+}
+
+
+int playerEnter()
+{
+
+   int playerEn = 0;
+   std:: cout << "Enter The Following Option\n";
+   std:: cin >> playerEn;
+
+   if (playerEn > 4 || playerEn < 0)
    {
-     case 'B':
-     case 'b':
-     goodInput = true;
-     gameOptions();
-    }
-  
- 
+     std:: cout << "Wrong Key Entered\n";
+	 system("pause");
+	 playerEnter();
+   }
+   displayplayerEnter(playerEn);
+   return playerEn; 
+
+}
+
+
+int displayplayerEnter(int playerEn)
+{
+	if (playerEn == 0)
+	{
+		std:: cout << "You have chosen rock!\n"; 
+		return playerEn;
+	}
+	else
+	{
+		switch (playerEn) {
+		case 1:
+			std:: cout << "You have chosen paper!\n";
+		break;
+		case 2:
+			std:: cout << "You have chosen scissors!\n";
+		break;
+		case 3:
+			std:: cout << "You have chosen lizard!\n";
+		break;
+		case 4:
+			std:: cout << "You have chosen Spock!\n";
+		break;
+		default:
+			std:: cout << "Wrong Input\n";
+			system("pause");
+			playerEnter();
+			break;
+		}
+	}
+
+	return playerEn;
+}
+
+int ComputerEnter()
+{
+	int compEn = 0; 
+
+	compEn = rand() % 5; 
+
+	displaycomputerEnter(compEn);
+
+	return compEn;
+}
+
+int displaycomputerEnter(int compEn)
+{
+	
+
+	switch (compEn) {
+	case 0:
+		std:: cout << "Computer has used rock!\n";
+		break;
+	case 1:
+		std:: cout << "Computer has used paper!\n";
+		break;
+	case 2:
+		std:: cout << "Computer has used scissors!\n";
+		break;
+	case 3:
+		std:: cout << "Computer has used lizard!\n";
+		break;
+	case 4:
+		std:: cout << "Computer has used Spock!\n"; 
+		break;
+	default:
+		break;
+	}
+	return compEn;
+}
+
+void CheckResult(int playerEn, int computerEn)
+{
+
+	if (playerEn == computerEn)
+	{
+		std::cout << "Draw!\n";
+
+		endGame();
+
+	}
+	else
+	{
+		gameResults = results[playerEn][computerEn];
+
+		if (gameResults == true)
+		{
+			std:: cout << "Player wins!\n";
+
+			endGame();
+
+		}
+		else if (gameResults == false)
+		{
+			std:: cout << "Computer wins!\n";
+
+			endGame();
+
+		}
+	}
+}
+
+void endGame()
+{
+	std:: cout << "Play again [Y/N]?\n";
+	std:: cin >> continueGame;
+
+	switch (continueGame) {
+	case 'Y':
+	case 'y':
+		showMenu(); 
+		break;
+	case 'N':
+	case 'n':
+		gameActive = false;
+		Input = false; 
+		break;
+	default:
+		std:: cout << "Invalid Input!\n";
+		endGame(); 
+		break;
+	}
+}
+
+void QuitOptions()
+{
+	Input = true;
+
+	std:: cout << "Thanks for playoing\n";
+	system("pause");
+	return;
 }
 
 void gameInformation()
 {
-  cout << " Welcome To The Game Information Page\n";
-  cout << " These are the rules that you use when you play rock, paper, scissor, lizard, spock:\n";
-  cout << "\n";
-  cout << "Rock crushes Lizard and crushes Scissors\n";
-  cout << "Paper disproves Spock and covers Rock\n";
-  cout << "Scissors cuts Paper and decapitates Lizard\n";
-  cout << "Lizard poisons Spock and eats Paper\n";
-  cout << "Spock smashes Scissors and vaporises Rock\n";
-  cout << "\n";
-  cout << "\n";
-  cout << "When you start the game you will be presented will the options [R],[P],[S],[L],[O]\n";
-  cout << "\n";
-  cout << "[R] = Rock\n";
-  cout << "[P] = Paper\n";
-  cout << "[S] = Scissors\n";
-  cout << "[L] = Lizard\n";
-  cout << "[O] = Spock\n";
-  cout << "\n";
-  cout << "When you win you score will be recorded against the computer in the score bored\n";
-  cout << "\n";
-  cout << "Good luck!!";
-  cout << "\n";
-  cout << "Enter [B] to go back to menu  \n";
+  std:: cout << " Welcome To The Game Information Page\n";
+  std:: cout << " These are the rules that you use when you play rock, paper, scissor, lizard, spock:\n";
+  std:: cout << "\n";
+  std:: cout << "Rock crushes Lizard and crushes Scissors\n";
+  std:: cout << "Paper disproves Spock and covers Rock\n";
+  std:: cout << "Scissors cuts Paper and decapitates Lizard\n";
+  std:: cout << "Lizard poisons Spock and eats Paper\n";
+  std:: cout << "Spock smashes Scissors and vaporises Rock\n";
+  std:: cout << "\n";
+  std:: cout << "\n";
+  std:: cout << "When you start the game you will be presented will the options [R],[P],[S],[L],[O]\n";
+  std:: cout << "\n";
+  std:: cout << "[R] = Rock\n";
+  std:: cout << "[P] = Paper\n";
+  std:: cout << "[S] = Scissors\n";
+  std:: cout << "[L] = Lizard\n";
+  std:: cout << "[O] = Spock\n";
+  std:: cout << "\n";
+  std:: cout << "When you win you score will be recorded against the computer in the score bored\n";
+  std:: cout << "\n";
+  std:: cout << "Good luck!!";
+  std:: cout << "\n";
   
-  cin >> playerEnter;
-  switch (playerEnter) 
+  switch (gameinformationEn)
   {
-	  case 'B':
-	  case 'b':
-		goodInput = true;
-		gameOptions();
-		break;
+     case 'B':
+     case 'b':
+	   showMenu();
+	   break;
+  
+      default:
+	  endGame();
+	  break;
   }
-
+  
 }
 
-void quitGame()
+int main ()
 {
- goodInput = true;
- gameactive = false;
- cout << "I hope you had fun playing against the computer, do not worry you d-ont have to win all the time!\n";
- 
- return;
+   while (Input == false)
+   {
+    menuOptions(showMenu());
+   }
+    while (gameActive == true)
+   {
+    instruction();
+   }
+
+ return 0;
 }
 
 
@@ -167,5 +315,3 @@ void quitGame()
 
 
 
-
-// what i want to do - in void startgame() i want the player to enter their key then the console prints out what the player has chose, same with the computer to print out what the computer chose. then i want the player choice and computers choice to see who won. how to assign the keys R P S L O to the 2D array
